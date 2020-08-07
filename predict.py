@@ -18,7 +18,7 @@ def predict(file):
   answer = np.argmax(result)
 
   print(100 * np.max(tf.nn.softmax(array[0])))
-  print(array)
+  print(result)
   if answer == 0:
     print("pred: abejas")
   elif answer == 1:
@@ -28,4 +28,4 @@ def predict(file):
 
   return answer
 
-predict('imagenes/abejas/ia_100000001989.jpg')
+predict('imagenes/arañas/ia_100000002.jpeg')
