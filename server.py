@@ -15,20 +15,31 @@ from tensorflow.keras.models import load_model
 
 
 # Server configuration
-predict_labels = ['abeja', 'araña', 'langosta'] # Hardcode labels prediction. TODO: Refactor this to load a label file, need to rewrite train.py code to store the labels.
+predict_labels = []
 model_path = './model/model.h5'
 weights_path = './model/weights.h5'
-size = 300
+labels_path = './model/labels.txt'
+image_width = 300
+image_height = 300
+
 port = 5000
 
 # Allow to expand the memory used for the graphic card.
+
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 if len(physical_devices) > 0:
     tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
+#Load model
+
 cnn = load_model(model_path)
 cnn.load_weights(weights_path)
 
+# Load labels
+
+labels_file = open(labels_path,"r")
+for line in labels_file.readlines():
+    predict_labels.append(line.rstrip())
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -43,7 +54,7 @@ def get_detections():
         image_name = image.filename
         image_names.append(image_name)
         image.save(os.path.join(os.getcwd(), image_name))
-        img_raw = load_img(image_name, target_size=(size,size))
+        img_raw = load_img(image_name, target_size=(image_height, image_width))
         raw_images.append(img_raw)
         
     num = 0
