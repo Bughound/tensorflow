@@ -16,8 +16,8 @@ from tensorflow.keras.models import load_model
 
 # Server configuration
 predict_labels = ['abeja', 'araña', 'langosta'] # Hardcode labels prediction. TODO: Refactor this to load a label file, need to rewrite train.py code to store the labels.
-model_path = './modelo/modelo.h5'
-weights_path = './modelo/pesos.h5'
+model_path = './model/model.h5'
+weights_path = './model/weights.h5'
 size = 300
 port = 5000
 
@@ -60,15 +60,12 @@ def get_detections():
         t1 = time.time()
         array = cnn.predict(img)
         result = array[0]
-        answer = np.argmax(result)
 
         t2 = time.time()
         print('time: {}'.format(t2 - t1))
 
         print('detections:')
         for index, val in enumerate(result):
-            print(index)
-            print(val)
             responses.append({
                 "class": predict_labels[index],
                 "confidence": float("{0:.2f}".format(np.array(result[index])*100))

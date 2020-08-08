@@ -18,9 +18,9 @@ data_validacion = './data/validation'
 """
 Parameters
 """
-epocas=50
+epocas=500
 longitud, altura = 300, 300
-batch_size = 8
+batch_size = 32
 pasos = 600
 validation_steps = 120
 filtrosConv1 = 16
@@ -50,14 +50,12 @@ entrenamiento_generador = entrenamiento_datagen.flow_from_directory(
     directory=data_entrenamiento,
     target_size=(altura, longitud),
     batch_size=batch_size,
-    shuffle=True,
     class_mode='categorical')
 
 validacion_generador = test_datagen.flow_from_directory(
     directory=data_validacion,
     target_size=(altura, longitud),
     batch_size=batch_size,
-    shuffle=True,
     class_mode='categorical')
 
 
