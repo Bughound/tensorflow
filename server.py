@@ -81,6 +81,7 @@ def get_detections():
                 "class": predict_labels[index],
                 "confidence": float("{0:.2f}".format(np.array(result[index])*100))
             })
+            print(responses[index])
         response.append({
             "image": image_names[j],
             "detections": responses
