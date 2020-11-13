@@ -1,3 +1,4 @@
 Apis mellifera
-Latrodectus mactans
 Dichroplus elongatus
+Latrodectus mactans
+Triatoma infestans

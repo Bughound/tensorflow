@@ -25,7 +25,7 @@ longitud, altura = 300, 300
 batch_size = 32
 pasos = 600
 validation_steps = 120
-clases = 3
+clases = 4
 lr = 0.0004
 
 
@@ -75,6 +75,11 @@ cnn.compile(loss="categorical_crossentropy",
             metrics=['accuracy'])
 
 print(entrenamiento_generador.class_indices)
+
+with open("model/labels.txt", "w") as txt_file:
+    for line in entrenamiento_generador.class_indices:
+        txt_file.write(line)
+        txt_file.write("\n")
 
 cnn.fit(
     entrenamiento_generador,
