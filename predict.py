@@ -3,14 +3,14 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from tensorflow.keras.models import load_model
 
-longitud, altura = 300, 300
-modelo = './model/model.h5'
-pesos_modelo = './model/weights.h5'
-cnn = load_model(modelo)
-cnn.load_weights(pesos_modelo)
+width, height = 300, 300
+model = './model/model.h5'
+weights = './model/weights.h5'
+cnn = load_model(model)
+cnn.load_weights(weights)
 
 def predict(file):
-  x = load_img(file, target_size=(longitud, altura))
+  x = load_img(file, target_size=(width, height))
   x = img_to_array(x) / 255
   x = np.expand_dims(x, axis=0)
   array = cnn.predict(x)
@@ -19,13 +19,7 @@ def predict(file):
 
   print(100 * np.max(tf.nn.softmax(array[0])))
   print(result)
-  if answer == 0:
-    print("pred: abejas")
-  elif answer == 1:
-    print("pred: arañas")
-  elif answer == 2:
-    print("pred: langostas")
 
   return answer
 
-predict('imagenes/arañas/ia_100000002.jpeg')
+# predict('imagenes/arañas/ia_100000002.jpeg')
