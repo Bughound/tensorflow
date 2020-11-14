@@ -14,24 +14,24 @@ K.clear_session()
 
 
 
-data_entrenamiento = './data/train'
-data_validacion = './data/validation'
+data_train = './data/train'
+data_validation = './data/validation'
 
 """
 Parameters
 """
-epocas=50
-longitud, altura = 300, 300
+epochs=50
+width, height = 300, 300
 batch_size = 32
-pasos = 600
+steps = 600
 validation_steps = 120
-clases = 4
+classes = 4
 lr = 0.0004
 
 
-##Preparamos nuestras imagenes
+##Images preparation
 
-entrenamiento_datagen = ImageDataGenerator(
+train_datagen = ImageDataGenerator(
     rescale=1. / 255,
     shear_range=0.2,
     rotation_range=45,
@@ -45,15 +45,15 @@ test_datagen = ImageDataGenerator(
     rescale=1. / 255,
     preprocessing_function=preprocess_input)
 
-entrenamiento_generador = entrenamiento_datagen.flow_from_directory(
-    directory=data_entrenamiento,
-    target_size=(altura, longitud),
+train_generator = train_datagen.flow_from_directory(
+    directory=data_train,
+    target_size=(height, width),
     batch_size=batch_size,
     class_mode='categorical')
 
-validacion_generador = entrenamiento_datagen.flow_from_directory(
-    directory=data_validacion,
-    target_size=(altura, longitud),
+validation_generator = train_datagen.flow_from_directory(
+    directory=data_validation,
+    target_size=(height, width),
     batch_size=batch_size,
     class_mode='categorical')
 
@@ -66,7 +66,7 @@ cnn.add(tf.keras.applications.MobileNetV2(
     pooling='avg'
 ))
 
-cnn.add(Dense(clases, activation='softmax'))
+cnn.add(Dense(classes, activation='softmax'))
 cnn.layers[0].trainable = False
 
 
@@ -74,21 +74,21 @@ cnn.compile(loss="categorical_crossentropy",
             optimizer=optimizers.Adam(lr=lr),
             metrics=['accuracy'])
 
-print(entrenamiento_generador.class_indices)
+print(train_generator.class_indices)
 
 with open("model/labels.txt", "w") as txt_file:
-    for line in entrenamiento_generador.class_indices:
+    for line in train_generator.class_indices:
         txt_file.write(line)
         txt_file.write("\n")
 
 cnn.fit(
-    entrenamiento_generador,
-    steps_per_epoch=pasos/batch_size,
-    epochs=epocas,
-    validation_data=validacion_generador,
+    train_generator,
+    steps_per_epoch=steps/batch_size,
+    epochs=epochs,
+    validation_data=validation_generator,
     validation_steps=validation_steps/batch_size)
 
-print(entrenamiento_generador.class_indices)
+print(train_generator.class_indices)
 
 target_dir = './model/'
 if not os.path.exists(target_dir):
